@@ -1,0 +1,27 @@
+@using EventEase.Models
+@inject NavigationManager Navigation
+
+<div class="card p-4 shadow-lg rounded-lg hover:shadow-xl transition">
+    <h2 class="text-xl font-semibold">@Event.Title</h2>
+    <p class="text-gray-600">@Event.Date.ToShortDateString()</p>
+    <p class="mt-2">@Event.Description</p>
+    <button class="btn btn-primary mt-4" @onclick="() => NavigateToEvent()">
+        View Details
+    </button>
+</div>
+
+@code {
+    [Parameter] public EventModel Event { get; set; }
+
+    private void NavigateToEvent()
+    {
+        Navigation.NavigateTo($"/event/{Event.Id}");
+    }
+}
+@using EventEase.Models
+
+<div class="event-card">
+    <h2>@Event.Title</h2>
+    <p>@Event.Date.ToShortDateString()</p>
+    <p>@Event.Description</p>
+</div>

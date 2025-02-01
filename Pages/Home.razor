@@ -1,0 +1,25 @@
+﻿@page "/"
+
+@using EventEase.Models
+@using EventEaseApp.Components
+
+@code {
+    private List<EventModel> events = new()
+    {
+        new EventModel { Id = 1, Title = "Tech Conference 2025", Date = new DateTime(2025, 3, 15), Description = "A conference about the latest in tech." },
+        new EventModel { Id = 2, Title = "Music Festival", Date = new DateTime(2025, 4, 10), Description = "A festival featuring top artists." }
+    };
+}
+
+<h1>Upcoming Events</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    @foreach (var eventItem in events)
+    {
+        <event-card Event="eventItem" />
+        <a href="/eventdetails/@eventItem.Id">View Details</a>
+    }
+</div>
+
+
+

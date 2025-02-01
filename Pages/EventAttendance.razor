@@ -1,0 +1,31 @@
+@page "/attendance/{eventId:int}"
+@using EventEase.Models
+@inject EventEaseApp.Services.AttendanceService AttendanceService
+
+@code {
+    [Parameter]
+    public int EventId { get; set; }
+
+    private List<AttendanceModel> attendances = new List<AttendanceModel>();
+
+    protected override void OnInitialized()
+    {
+        attendances = AttendanceService.GetAttendances(EventId);
+    }
+}
+
+<h1>Attendance for Event @EventId</h1>
+
+@if (attendances != null && attendances.Count > 0)
+{
+    <ul>
+        @foreach (var attendance in attendances)
+        {
+            <li>@attendance.UserName - @attendance.RegistrationDate</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No attendees registered yet.</p>
+}

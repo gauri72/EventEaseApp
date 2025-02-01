@@ -1,0 +1,85 @@
+#nullable enable
+@using EventEase.Models
+@inject NavigationManager Navigation
+@inject EventEaseApp.Services.UserSessionService UserSessionService
+@inject EventEaseApp.Services.AttendanceService AttendanceService
+
+@code {
+#nullable enable
+    [Parameter]
+    public int EventId { get; set; }
+
+    private EventModel? eventDetails;
+    private RegistrationModel registration = new();
+    private bool isSubmitted = false;
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            // Mock data for demonstration
+            eventDetails = new EventModel { Id = EventId, Title = "Sample Event", Date = DateTime.Now, Description = "This is a sample event description." };
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error initializing component: {ex.Message}";
+        }
+    }
+
+    private void HandleValidSubmit()
+    {
+        try
+        {
+            isSubmitted = true;
+            // Register attendance
+            AttendanceService.RegisterAttendance(EventId, registration.Name);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error submitting form: {ex.Message}";
+        }
+    }
+}
+
+@if (eventDetails != null)
+{
+    <h1>Register for @eventDetails.Title</h1>
+    <p>@eventDetails.Date.ToShortDateString()</p>
+    <p>@eventDetails.Description</p>
+}
+else
+{
+    <p>Loading event details...</p>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="error">@errorMessage</p>
+}
+
+@if (isSubmitted)
+{
+    <p>Thank you for registering, @registration.Name!</p>
+}
+else
+{
+    <EditForm Model="registration" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="name">Name:</label>
+            <InputText id="name" @bind-Value="registration.Name" />
+            <ValidationMessage For="@(() => registration.Name)" />
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            <InputText id="email" @bind-Value="registration.Email" />
+            <ValidationMessage For="@(() => registration.Email)" />
+        </div>
+
+        <button type="submit">Register</button>
+    </EditForm>
+}

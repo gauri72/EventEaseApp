@@ -1,0 +1,26 @@
+@page "/eventdetails/{eventId:int}"
+@using EventEase.Models
+@code {
+    [Parameter]
+    public int EventId { get; set; }
+
+    private EventModel? eventDetails;
+
+    protected override void OnInitialized()
+    {
+        // Mock data for demonstration
+        eventDetails = new EventModel { Id = EventId, Title = "Sample Event", Date = DateTime.Now, Description = "This is a sample event description." };
+    }
+}
+
+@if (eventDetails != null)
+{
+    <h1>@eventDetails.Title</h1>
+    <p>@eventDetails.Date.ToShortDateString()</p>
+    <p>@eventDetails.Description</p>
+    <a href="/register/@eventDetails.Id">Register</a>
+}
+else
+{
+    <p>Loading event details...</p>
+}

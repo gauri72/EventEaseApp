@@ -1,0 +1,26 @@
+@page "/usersession"
+@inject EventEaseApp.Services.UserSessionService UserSessionService
+
+@code {
+    private string? userName;
+
+    private void UpdateUserName()
+    {
+        if (userName != null)
+        {
+            UserSessionService.SetUserName(userName);
+        }
+    }
+}
+
+<h3>User Session Tracker</h3>
+
+<p>Session Start Time: @UserSessionService.SessionStartTime</p>
+
+<p>
+    <label for="userName">User Name: </label>
+    <input id="userName" @bind="userName" />
+    <button @onclick="UpdateUserName">Set User Name</button>
+</p>
+
+<p>Current User Name: @UserSessionService.UserName</p>
